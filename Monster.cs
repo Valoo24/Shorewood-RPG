@@ -10,6 +10,7 @@ namespace RPG
     {
         #region Attributs
         public int AutoMove;
+        public int EXP;
         public string ASCII;
         #endregion
         #region constucteur

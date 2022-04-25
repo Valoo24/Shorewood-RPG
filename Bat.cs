@@ -12,6 +12,7 @@ namespace RPG
         public Bat()
         {
             Name = "Chauve-Souris";
+            EXP = 2;
             chance = 4;
             for(int i = 0; i < chance / 2; i++)
             {
@@ -83,7 +84,7 @@ namespace RPG
         #region Méthodes
         public void BatMove(Map World)
         {
-            if (this.Position[1] % 2 == 0)
+            if (this.Position[1] % 3 == 0)
             {
                 this.AutoMove *= -1;
             }

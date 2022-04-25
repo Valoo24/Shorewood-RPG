@@ -11,6 +11,7 @@ namespace RPG
         #region Attributs
         public string Race;
         public float Bonus;
+        public string[] Inventaire = new string[10];
         #endregion
         #region constructeur
         public Hero()
@@ -43,7 +44,10 @@ namespace RPG
                 Bonus = 1.0f;
             }
 
+            Console.WriteLine("Veuillez saisir le nom de votre héros.");
+            Name = Console.ReadLine();
             Race = SetRace();
+            Avatar = SetAvatar();
 
             PV = (int)(Endurance * Bonus);
         }
@@ -88,7 +92,7 @@ namespace RPG
 
             return this.Race;
         }
-        public static string SetAvatar(Hero Character)
+        public string SetAvatar()
         {
             bool error = true;
             do
@@ -99,15 +103,15 @@ namespace RPG
                 switch (cki.KeyChar)
                 {
                     case '1':
-                        Character.Avatar = "☺";
+                        this.Avatar = "☺";
                         error = false;
                         break;
                     case '2':
-                        Character.Avatar = "☻";
+                        this.Avatar = "☻";
                         error = false;
                         break;
                     case '3':
-                        Character.Avatar = "♥";
+                        this.Avatar = "♥";
                         error = false;
                         break;
                     default:
@@ -115,13 +119,13 @@ namespace RPG
                 }
             } while (error);
 
-            return Character.Avatar;
+            return this.Avatar;
         }
-        public static void ShowStats(Hero Character)
+        public void ShowStats()
         {
-            Console.WriteLine($"Nom: {Character.Name}\nRace: {Character.Race}\nForce: {Character.Force}\nEndurance {Character.Endurance}\nPV: {Character.PV}");
+            Console.WriteLine($"Nom: {this.Name}\nRace: {this.Race}\nForce: {this.Force}\nEndurance {this.Endurance}\nPV: {this.PV}");
         }
-        public static void Move(Hero Character, Map world)
+        public void Move(Map world)
         {
             bool error = false;
             do
@@ -130,54 +134,54 @@ namespace RPG
                 switch (cki.Key)
                 {
                     case ConsoleKey.UpArrow:
-                        if (Character.Position[0] == 1)
+                        if (this.Position[0] == 1)
                         {
                             Console.WriteLine("Il y a un mur devant de le héros, impossible d'avancer.");
                             Console.ReadKey();
                         }
                         else
                         {
-                            world.WorldMap[Character.Position[0], Character.Position[1]] = " ";
-                            Character.Position[0]--;
+                            world.WorldMap[this.Position[0], this.Position[1]] = " ";
+                            this.Position[0]--;
                         }
                         error = false;
                         break;
                     case ConsoleKey.DownArrow:
-                        if (Character.Position[0] == world.WorldMap.GetLength(0) - 2)
+                        if (this.Position[0] == world.WorldMap.GetLength(0) - 2)
                         {
                             Console.WriteLine("Il y a un mur devant de le héros, impossible d'avancer.");
                             Console.ReadKey();
                         }
                         else
                         {
-                            world.WorldMap[Character.Position[0], Character.Position[1]] = " ";
-                            Character.Position[0]++;
+                            world.WorldMap[this.Position[0], this.Position[1]] = " ";
+                            this.Position[0]++;
                         }
                         error = false;
                         break;
                     case ConsoleKey.LeftArrow:
-                        if (Character.Position[1] == 1)
+                        if (this.Position[1] == 1)
                         {
                             Console.WriteLine("Il y a un mur devant de le héros, impossible d'avancer.");
                             Console.ReadKey();
                         }
                         else
                         {
-                            world.WorldMap[Character.Position[0], Character.Position[1]] = " ";
-                            Character.Position[1]--;
+                            world.WorldMap[this.Position[0], this.Position[1]] = " ";
+                            this.Position[1]--;
                         }
                         error = false;
                         break;
                     case ConsoleKey.RightArrow:
-                        if (Character.Position[1] == world.WorldMap.GetLength(1) - 2)
+                        if (this.Position[1] == world.WorldMap.GetLength(1) - 2)
                         {
                             Console.WriteLine("Il y a un mur devant de le héros, impossible d'avancer.");
                             Console.ReadKey();
                         }
                         else
                         {
-                            world.WorldMap[Character.Position[0], Character.Position[1]] = " ";
-                            Character.Position[1]++;
+                            world.WorldMap[this.Position[0], this.Position[1]] = " ";
+                            this.Position[1]++;
                         }
                         error = false;
                         break;

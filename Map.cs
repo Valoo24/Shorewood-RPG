@@ -66,13 +66,14 @@ namespace RPG
         }
         public void Battle(Hero Character, Monster Mob)
         {
+            int r = 0;
             bool stop = false;
             bool IsFlying = false;
             Console.Clear();
             Console.WriteLine($"Vous tombez sur {Mob.Name} !!!");
             do
             {
-                Hero.ShowStats(Character);
+                Character.ShowStats();
                 #region BattleMenu
                 Console.WriteLine(@"
  -------------   -----------   -----------   -----------
@@ -89,6 +90,12 @@ namespace RPG
                         if (Mob.IsDead())
                         {
                             Console.WriteLine($"Vous avez tué {Mob.Name}!");
+                            r = Mob.rand.Next(1, Mob.EXP);
+                            Character.Force += r;
+                            Console.WriteLine($"{Character.Name} gagne +{r} en force. La force de {Character.Name} est maintenant de {Character.Force}.");
+                            r = Mob.rand.Next(1, Mob.EXP);
+                            Character.Endurance += r;
+                            Console.WriteLine($"{Character.Name} gagne +{r} en Endurance. L'endurance de {Character.Name} est maintenanr de {Character.Endurance}.");
                             stop = true;
                         }
                         break;

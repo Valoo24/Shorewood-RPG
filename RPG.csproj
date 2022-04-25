@@ -45,6 +45,7 @@
   <ItemGroup>
     <Compile Include="Character.cs" />
     <Compile Include="Bat.cs" />
+    <Compile Include="Wolf.cs" />
     <Compile Include="Monster.cs" />
     <Compile Include="Hero.cs" />
     <Compile Include="Hole.cs" />
