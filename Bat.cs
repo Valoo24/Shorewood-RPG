@@ -9,11 +9,11 @@ namespace RPG
     public class Bat : Monster
     {
         #region Constructeur
-        public Bat()
+        public Bat(Hero Hero)
         {
             Name = "Chauve-Souris";
-            EXP = 2;
-            chance = 4;
+            EXP = 50;
+            chance = rand.Next(3, 5);
             for(int i = 0; i < chance / 2; i++)
             {
                 Force += rand.Next(1, chance);
@@ -22,12 +22,8 @@ namespace RPG
             {
                 Endurance += rand.Next(1, chance);
             }
-            PV = Endurance + 2;
-            AutoMove = 1;
-            for (int i = 0; i < 2; i++)
-            {
-                this.Position[i] = rand.Next(3, 6);
-            }
+            PV = Endurance * chance;
+            SetPosition(Hero);
             #region ASCII Chauve-souris
             ASCII = @"
 #
@@ -79,17 +75,6 @@ namespace RPG
 		
 ";
             #endregion
-        }
-        #endregion
-        #region Méthodes
-        public void BatMove(Map World)
-        {
-            if (this.Position[1] % 3 == 0)
-            {
-                this.AutoMove *= -1;
-            }
-            World.WorldMap[this.Position[0], this.Position[1]] = " ";
-            this.Position[1] += this.AutoMove;
         }
         #endregion
     }

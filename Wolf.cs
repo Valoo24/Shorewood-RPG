@@ -9,11 +9,11 @@ namespace RPG
     internal class Wolf : Monster
     {
         #region Constructeurs
-        public Wolf()
+        public Wolf(Hero Hero)
         {
             Name = "Loup";
-            EXP = 3;
-            chance = 6;
+            EXP = 100;
+            chance = rand.Next(5, 7);
             for (int i = 0; i < chance / 2; i++)
             {
                 Force += rand.Next(1, chance);
@@ -22,12 +22,8 @@ namespace RPG
             {
                 Endurance += rand.Next(1, chance);
             }
-            PV = Endurance + 2;
-            AutoMove = 1;
-            for (int i = 0; i < 2; i++)
-            {
-                this.Position[i] = rand.Next(15, 21);
-            }
+            PV = Endurance * chance;
+            SetPosition(Hero);
             #region ASCII Loup
             ASCII = @"
 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
@@ -51,17 +47,6 @@ namespace RPG
 @@@@@@@@@@@@@/  (___.'\_______)\_|_|        \@@@@@@@@@@@@@@@@
 @@@@@@@@@@@@|\________                       ~~~~~\@@@@@@@@@@";
             #endregion
-        }
-        #endregion
-        #region Méthodes
-        public void WolfMove(Map World)
-        {
-            if (this.Position[1] % 5 == 0)
-            {
-                this.AutoMove *= -1;
-            }
-            World.WorldMap[this.Position[0], this.Position[1]] = " ";
-            this.Position[1] += this.AutoMove;
         }
         #endregion
     }

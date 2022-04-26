@@ -11,12 +11,16 @@ namespace RPG
         #region Attributs
         public string Race;
         public float Bonus;
-        public string[] Inventaire = new string[10];
+        public int StepCount;
+        public int NextLevel;
         #endregion
         #region constructeur
         public Hero()
         {
-            chance = 4;
+            EXP = 0;
+            NextLevel = 100;
+            StepCount = 0;
+            chance = rand.Next(3, 5);
             for (int i = 0; i < chance; i++)
             {
                 Force += rand.Next(1, chance + 2);
@@ -49,7 +53,7 @@ namespace RPG
             Race = SetRace();
             Avatar = SetAvatar();
 
-            PV = (int)(Endurance * Bonus);
+            PV = (int)(Endurance * Bonus * chance);
         }
         #endregion
         #region Méthodes
@@ -118,7 +122,7 @@ namespace RPG
                         break;
                 }
             } while (error);
-
+            Console.Clear();
             return this.Avatar;
         }
         public void ShowStats()

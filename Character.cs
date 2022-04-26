@@ -16,6 +16,7 @@ namespace RPG
         public int PV;
         public int Force;
         public int Endurance;
+        public int EXP;
         public Random rand = new Random();
         #endregion
         #region Méthodes
@@ -45,9 +46,9 @@ namespace RPG
         public void Attack(Character Opponent)
         {
             Console.WriteLine($"{this.Name} se lance à l'assaut !");
-            if(this.throwDice(this.chance) > Opponent.Endurance / this.rand.Next(2, chance / 2))
+            if(this.throwDice(this.chance/2) > Opponent.Endurance)
             {
-                Opponent.PV -= this.Force / this.rand.Next(1, chance / 3);
+                Opponent.PV -= this.Force;
                 Console.WriteLine($"{Opponent.Name} est touché et perds {this.Force} PV!");
             }
             else
