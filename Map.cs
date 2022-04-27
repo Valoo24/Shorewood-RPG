@@ -81,7 +81,7 @@ namespace RPG
         /// <param name="Mob">Instance du monstre que le héros risque de combattre</param>
         public void RandomFight(Hero Character, Monster Mob)
         {
-            if(Character.throwDice(1) < Character.StepCount)
+            if(Character.throwDice(1) * 2 < Character.StepCount)
             {
                 this.Battle(Character, Mob);
                 if (!Character.IsDead())
@@ -120,6 +120,7 @@ namespace RPG
  -------------   -----------   -----------   -----------");
                 #endregion
                 Console.WriteLine(Mob.ASCII);
+                Console.Write("Action sélectionnée: ");
                 ConsoleKeyInfo cki = Console.ReadKey();
                 Console.WriteLine();
                 switch(cki.KeyChar)
@@ -129,38 +130,84 @@ namespace RPG
                         if (Mob.IsDead())
                         {
                             Console.WriteLine($"Vous avez tué {Mob.Name}!");
-                            // Mettre ici le code d'obtention d'expérience et de gain de niveau / stats
                             Character.EXP += Mob.EXP;
-                            if(Character.EXP >= Character.NextLevel)
+                            #region Gain de niveau
+                            if (Character.EXP >= Character.NextLevel)
                             {
-                                Console.WriteLine($"Wow ! {Character.Name} Monte d'un niveau !");
+                                Console.ReadKey();
+                                Console.Clear();
+                                Character.Level++;
+                                Character.NextLevel = (Character.NextLevel / 2) + (Character.NextLevel * 2);
+                                Character.MaxPV += (int)(Character.MaxPV * 0.1);
+                                Character.PV = Character.MaxPV;
+                                Console.WriteLine($"Wow ! {Character.Name} Monte d'un niveau ! {Character.Level - 1} ► {Character.Level}\n{Character.Name} récupère tout ses PV !");
                                 r = Character.rand.Next(1, 2);
                                 switch (Character.rand.Next(1, 4))
                                 {
                                     case 1:
                                         Character.Force += r;
+                                        Console.WriteLine($"{Character.Name} gagne +{r} en force : {Character.Force - r} ► {Character.Force}");
                                         break;
                                     case 2:
                                         Character.Endurance += r;
+                                        Console.WriteLine($"{Character.Name} gagne +{r} en endurance : {Character.Endurance - r} ► {Character.Endurance}");
                                         break;
                                     case 3:
                                         Character.chance += 1;
+                                        Console.WriteLine($"{Character.Name} gagne +1 en chance : {Character.chance - 1} ► {Character.chance}");
                                         break;
                                     case 4:
                                         Character.Force += r;
+                                        Console.WriteLine($"{Character.Name} gagne +{r} en force : {Character.Force - r} ► {Character.Force}");
+
+                                        r = Character.rand.Next(1, 2);
                                         Character.Endurance += r;
+                                        Console.WriteLine($"{Character.Name} gagne +{r} en endurance : {Character.Endurance - r} ► {Character.Endurance}");
+
                                         Character.chance += 1;
+                                        Console.WriteLine($"{Character.Name} gagne +1 en chance : {Character.chance - 1} ► {Character.chance}");
                                         break;
                                 }
                             }
+                            #endregion
                             stop = true;
                         }
                         break;
                     case '2': //Insérer Script du choix de Magie
                         break;
-                    case '3': //Insérer Script du choix d'objet dans l'inventaire
+                    case '3':
+                        Console.WriteLine("Sélectionnez un objet de votre invenaire à utiliser");
+                        int i = 1;
+                        foreach(string item in Character.Inventaire)
+                        {
+                            Console.Write($"{i}.{item}");
+                        }
+                        Console.WriteLine();
+                        Console.Write("Objet sélectionné: ");
+                        ConsoleKeyInfo key = Console.ReadKey();
+                        Console.WriteLine();
+                        switch(key.KeyChar)
+                        {
+                            case '1':
+                                if(Character.MaxPV - Character.PV >= Character.MaxPV / 2)
+                                {
+                                    i = Character.MaxPV / 2;
+                                }
+                                else
+                                {
+                                    i = Character.MaxPV - Character.PV;
+                                }
+                                Character.PV += i;
+                                Console.WriteLine($"{Character.Name} utilise une potion. {Character.Name} Récupère {i} PV.");
+                                Character.Inventaire.Remove("Potion");
+                                break;
+                            default:
+                                Console.WriteLine("Votre idiotie vous empêche d'agir.");
+                                break;
+                        }
                         break;
                     case '4':
+                        #region Fuite
                         Console.WriteLine("Vous fuyez comme un pleutre !");
                         switch(Character.throwDice(1) / 2)
                         {
@@ -176,6 +223,7 @@ namespace RPG
                                 Console.WriteLine("Coup de bol, vous fuyez sain et sauf !");
                                 break;
                         }
+                        #endregion
                         stop = true;
                         IsFlying = true;
                         break;
@@ -200,6 +248,7 @@ namespace RPG
                 }
                 Console.Clear();
             } while (!stop);
+            Mob.PV = Mob.MaxPV;
         }
         #endregion
     }

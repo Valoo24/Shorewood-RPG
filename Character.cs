@@ -13,10 +13,12 @@ namespace RPG
         public string Avatar;
         public int[] Position = new int[2];
         public int chance;
+        public int MaxPV;
         public int PV;
         public int Force;
         public int Endurance;
         public int EXP;
+        public int Level;
         public Random rand = new Random();
         #endregion
         #region Méthodes
@@ -38,7 +40,7 @@ namespace RPG
 
             for (int i = 0; i < NumberOfThrow; i++)
             {
-                result += this.rand.Next(1, this.chance);
+                result += this.rand.Next(1, this.chance + 1);
             }
 
             return result;
@@ -46,7 +48,7 @@ namespace RPG
         public void Attack(Character Opponent)
         {
             Console.WriteLine($"{this.Name} se lance à l'assaut !");
-            if(this.throwDice(this.chance/2) > Opponent.Endurance)
+            if(this.throwDice(this.chance) > Opponent.Endurance)
             {
                 Opponent.PV -= this.Force;
                 Console.WriteLine($"{Opponent.Name} est touché et perds {this.Force} PV!");

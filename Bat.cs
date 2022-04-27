@@ -13,16 +13,11 @@ namespace RPG
         {
             Name = "Chauve-Souris";
             EXP = 50;
-            chance = rand.Next(3, 5);
-            for(int i = 0; i < chance / 2; i++)
-            {
-                Force += rand.Next(1, chance);
-            }
-            for (int i = 0; i < chance / 2; i++)
-            {
-                Endurance += rand.Next(1, chance);
-            }
-            PV = Endurance * chance;
+            chance = 5;
+            Force = 8;
+            Endurance = 8;
+            MaxPV = 25;
+            PV = 25;
             SetPosition(Hero);
             #region ASCII Chauve-souris
             ASCII = @"

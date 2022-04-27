@@ -12,16 +12,11 @@ namespace RPG
         {
             Name = "Dragon";
             EXP = 200;
-            chance = rand.Next(7, 9);
-            for (int i = 0; i < chance / 2; i++)
-            {
-                Force += rand.Next(1, chance);
-            }
-            for (int i = 0; i < chance / 2; i++)
-            {
-                Endurance += rand.Next(1, chance);
-            }
-            PV = Endurance * chance;
+            chance = 9;
+            Force = 25;
+            Endurance = 18;
+            MaxPV = 100;
+            PV = 100;
             SetPosition(Hero);
             #region ASCII Dragon
             ASCII = @"

@@ -17,6 +17,14 @@ namespace RPG
         #endregion
         #region Méthodes
         public virtual void TrapEffect(Hero Character) { }
+        public void SetTrapPosition(Map WorldMap)
+        {
+            do
+            {
+                this.Position[0] = this.rand.Next(1, 23);
+                this.Position[1] = this.rand.Next(1, 54);
+            } while (WorldMap.WorldMap[this.Position[0], this.Position[1]] != " ");
+        }
         #endregion
     }
 }

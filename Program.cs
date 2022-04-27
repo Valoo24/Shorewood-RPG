@@ -10,28 +10,30 @@ namespace RPG
     {
         static void Main(string[] args)
         {
-            
+            Random random = new Random();
+            int MaxRandom = 1;
+            int nextPalier = 2;
             bool Lost = false;
             string Touches = "Déplacements: ↑ ↓ → ←";
             Hero MainCharacter = new Hero();
             Map World = new Map();
-            Hole Hole1 = new Hole();
 
             World.WorldMap = World.InitializeMap(24, 55);
 
             MainCharacter.Position[0] = World.WorldMap.GetLength(0)/2;
             MainCharacter.Position[1] = World.WorldMap.GetLength(1)/2;
 
-            Bat Bat1 = new Bat(MainCharacter);
-            Wolf Wolf1 = new Wolf(MainCharacter);
-            Dragon Dragon = new Dragon(MainCharacter);
+            Monster[] MonsterArray = { new Bat(MainCharacter), new Wolf(MainCharacter), new Dragon(MainCharacter) };
 
-            Bat1.SetPosition(MainCharacter);
-            Wolf1.SetPosition(MainCharacter);
+            Hole Hole1 = new Hole(World);
 
             while (!Lost)
             {
-                //Hero.ShowStats(MainCharacter);
+                if(MainCharacter.Level > nextPalier && MaxRandom < 4)
+                {
+                    MaxRandom++;
+                    nextPalier *= 2;
+                }
                 Console.WriteLine(Touches);
                 World.WorldMap[Hole1.Position[0], Hole1.Position[1]] = Hole1.Avatar;
                 World.WorldMap[MainCharacter.Position[0], MainCharacter.Position[1]] = MainCharacter.Avatar;
@@ -51,15 +53,10 @@ namespace RPG
                 }
                 else
                 {
-                    World.RandomFight(MainCharacter, Dragon);
+                    World.RandomFight(MainCharacter, MonsterArray[random.Next(0, MaxRandom)]);
                 }
 
-                if (Bat1.IsDead() && Wolf1.IsDead())
-                {
-                    Console.ReadKey();
-                    Lost = true;
-                }
-                else if(MainCharacter.IsDead())
+                if(MainCharacter.IsDead())
                 {
                     Console.ReadKey();
                     Lost = true;

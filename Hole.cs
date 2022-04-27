@@ -9,14 +9,11 @@ namespace RPG
     public class Hole : Trap
     {
         #region Constructeur
-        public Hole()
+        public Hole(Map WorldMap)
         {
             Avatar = "O";
             Damage = 10;
-            for (int i = 0; i < 2; i++)
-            {
-                this.Position[i] = rand.Next(9, 11);
-            }
+            SetTrapPosition(WorldMap);
         }
         #endregion
         #region Méthodes

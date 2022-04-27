@@ -13,39 +13,27 @@ namespace RPG
         public float Bonus;
         public int StepCount;
         public int NextLevel;
+        public List<string> Inventaire;
         #endregion
         #region constructeur
         public Hero()
         {
+            Level = 1;
             EXP = 0;
             NextLevel = 100;
             StepCount = 0;
-            chance = rand.Next(3, 5);
-            for (int i = 0; i < chance; i++)
-            {
-                Force += rand.Next(1, chance + 2);
-            }
+            chance = rand.Next(4, 6);
+            Force = throwDice(chance);
+            Endurance = throwDice(chance);
 
-            for (int i = 0; i < chance; i++)
+            switch(chance)
             {
-                Endurance += rand.Next(1, chance + 2);
-            }
-
-            if (Force > 15)
-            {
-                Bonus = 2.5f;
-            }
-            else if (Force > 10)
-            {
-                Bonus = 2.0f;
-            }
-            else if (Force > 5)
-            {
-                Bonus = 1.5f;
-            }
-            else if (Force <= 5)
-            {
-                Bonus = 1.0f;
+                case 4:
+                    Bonus = 2.0f;
+                    break;
+                case 5:
+                    Bonus = 1.5f;
+                    break;
             }
 
             Console.WriteLine("Veuillez saisir le nom de votre héros.");
@@ -53,7 +41,11 @@ namespace RPG
             Race = SetRace();
             Avatar = SetAvatar();
 
-            PV = (int)(Endurance * Bonus * chance);
+            MaxPV = (int)((Endurance + chance) * Bonus);
+            PV = MaxPV;
+
+            Inventaire = new List<string>();
+            Inventaire.Add("Potion");
         }
         #endregion
         #region Méthodes
@@ -127,7 +119,9 @@ namespace RPG
         }
         public void ShowStats()
         {
-            Console.WriteLine($"Nom: {this.Name}\nRace: {this.Race}\nForce: {this.Force}\nEndurance {this.Endurance}\nPV: {this.PV}");
+            Console.WriteLine($"Nom: {this.Name}\t Niveau: {this.Level}\n" +
+                $"PV: {this.PV} / {this.MaxPV}\t Force: {this.Force}\t Endurance: {this.Endurance}\t Chance: {this.chance}\n" +
+                $"Race: {this.Race}\t Niveau Suivant: {this.NextLevel - this.EXP} EXP");
         }
         public void Move(Map world)
         {
