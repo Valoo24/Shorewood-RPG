@@ -13,10 +13,20 @@ namespace RPG
         public string Avatar;
         public string Name;
         public int Damage;
+        public bool IsEffective;
         public Random rand = new Random();
         #endregion
+        #region Constructeur
+        public Trap()
+        {
+            Avatar = "*";
+            IsEffective = true;
+        }
+        #endregion
         #region Méthodes
-        public virtual void TrapEffect(Hero Character) { }
+        public virtual void TrapEffect(Hero Character) 
+        {
+        }
         public void SetTrapPosition(Map WorldMap)
         {
             do

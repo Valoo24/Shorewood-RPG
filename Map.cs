@@ -9,7 +9,14 @@ namespace RPG
     public class Map
     {
         #region Attributs
-        public string[,] WorldMap = new string[256, 256];
+        public string[,] WorldMap;
+        #endregion
+        #region Constructeur
+        public Map(int LineSize, int RowSize)
+        {
+            WorldMap = new string[LineSize, RowSize];
+            InitializeMap();
+        }
         #endregion
         #region Méthodes
         /// <summary>
@@ -18,46 +25,42 @@ namespace RPG
         /// <param name="LineSize">Nombre de lignes qui composent le tableau de la carte du monde. Représente sa "hauteur".</param>
         /// <param name="RowSize">Nombre de colonnes qui composent le tableau de la carte du monde. Représente sa "largeur".</param>
         /// <returns>Le tableau représentant la carte du monde.</returns>
-        public string[,] InitializeMap(int LineSize, int RowSize)
+        private void InitializeMap()
         {
-            string[,] map = new string[LineSize,RowSize];
-
-            for (int i = 0; i < LineSize; i++)
+            for (int i = 0; i < this.WorldMap.GetLength(0); i++)
             {
-                for (int j = 0; j < RowSize; j++)
+                for (int j = 0; j < this.WorldMap.GetLength(1); j++)
                 {
                     if (i == 0 && j == 0)
                     {
-                        map[i, j] = "╔";
+                        this.WorldMap[i, j] = "╔";
                     }
-                    else if (i == 0 && j == RowSize - 1)
+                    else if (i == 0 && j == this.WorldMap.GetLength(1) - 1)
                     {
-                        map[i, j] = "╗";
+                        this.WorldMap[i, j] = "╗";
                     }
-                    else if (i == LineSize - 1 && j == 0)
+                    else if (i == this.WorldMap.GetLength(0) - 1 && j == 0)
                     {
-                        map[i, j] = "╚";
+                        this.WorldMap[i, j] = "╚";
                     }
-                    else if (i == LineSize - 1 && j == RowSize - 1)
+                    else if (i == this.WorldMap.GetLength(0) - 1 && j == this.WorldMap.GetLength(1) - 1)
                     {
-                        map[i, j] = "╝";
+                        this.WorldMap[i, j] = "╝";
                     }
-                    else if ((i == 0 || i == LineSize - 1) && (j > 0 && j < RowSize - 1))
+                    else if ((i == 0 || i == this.WorldMap.GetLength(0) - 1) && (j > 0 && j < this.WorldMap.GetLength(1) - 1))
                     {
-                        map[i, j] = "═";
+                        this.WorldMap[i, j] = "═";
                     }
-                    else if ((j == 0 || j == RowSize - 1) && (i > 0 && i < LineSize - 1))
+                    else if ((j == 0 || j == this.WorldMap.GetLength(1) - 1) && (i > 0 && i < this.WorldMap.GetLength(0) - 1))
                     {
-                        map[i, j] = "║";
+                        this.WorldMap[i, j] = "║";
                     }
                     else
                     {
-                        map[i, j] = " ";
+                        this.WorldMap[i, j] = " ";
                     }
                 }
             }
-
-            return map;
         }
         /// <summary>
         /// Dessine la carte du monde dans la console.
@@ -177,12 +180,12 @@ namespace RPG
                     case '2': //Insérer Script du choix de Magie
                         break;
                     case '3':
-                        Console.WriteLine("Sélectionnez un objet de votre invenaire à utiliser (Appuyez sur \"Enter\" pour confirmer).");
                         int i = 1;
                         int choice = 0;
                         string choicetext;
                         if (Character.Inventaire.Count > 0)
                         {
+                            Console.WriteLine("Sélectionnez un objet de votre invenaire à utiliser (Appuyez sur \"Enter\" pour confirmer).");
                             foreach (Item item in Character.Inventaire)
                             {
                                 Console.Write($"{i}.{item.Name} X {item.Quantity}\t");
@@ -196,24 +199,7 @@ namespace RPG
                                 choice = Int32.Parse(choicetext) - 1;
                                 if (choice < Character.Inventaire.Count)
                                 {
-                                    if (Character.Inventaire[choice].Name == "Potion")
-                                    {
-                                        if (Character.MaxPV - Character.PV >= Character.MaxPV / 2)
-                                        {
-                                            i = Character.MaxPV / 2;
-                                        }
-                                        else
-                                        {
-                                            i = Character.MaxPV - Character.PV;
-                                        }
-                                        Character.PV += i;
-                                        Console.WriteLine($"{Character.Name} utilise {Character.Inventaire[choice].Name}. {Character.Name} Récupère {i} PV.");
-                                        Character.Inventaire[choice].Quantity -= 1;
-                                        if (Character.Inventaire[choice].Quantity == 0)
-                                        {
-                                            Character.Inventaire.RemoveAt(choice);
-                                        }
-                                    }
+                                    Character.Inventaire[choice].ItemEffect(Character, Mob);
                                 }
                                 else
                                 {
@@ -222,7 +208,7 @@ namespace RPG
                             }
                             else
                             {
-                                Console.WriteLine($"l'idiotie de {Character.Name} l'empêche d'agir.");
+                                Console.WriteLine($"votre idiotie empêche {Character.Name} d'agir.");
                             }
                         }
                         else
@@ -252,7 +238,7 @@ namespace RPG
                         IsFlying = true;
                         break;
                     default:
-                        Console.WriteLine($"l'idiotie de {Character.Name} l'empêche d'agir.");
+                        Console.WriteLine($"votre idiotie empêche {Character.Name} d'agir.");
                         break;
                 }
                 Console.ReadKey();

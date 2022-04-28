@@ -11,7 +11,7 @@ namespace RPG
         #region Constructeur
         public Hole(Map WorldMap)
         {
-            Avatar = "O";
+            Name = "trou";
             Damage = 10;
             SetTrapPosition(WorldMap);
         }
@@ -19,7 +19,18 @@ namespace RPG
         #region Méthodes
         public override void TrapEffect(Hero Character)
         {
-            Character.PV -= this.Damage;
+            if (this.IsEffective)
+            {
+                Character.CanFight = false;
+                Console.WriteLine($"{Character.Name} tombe dans un {this.Name}. {Character.Name} perds {this.Damage}PV.");
+                Character.PV -= this.Damage;
+                if (Character.PV < 0)
+                {
+                    Character.PV = 0;
+                }
+                this.Avatar = " ";
+                this.IsEffective = false;
+            }
         }
         #endregion
     }

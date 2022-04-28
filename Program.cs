@@ -15,17 +15,14 @@ namespace RPG
             int nextPalier = 2;
             bool Lost = false;
             string Touches = "Déplacements: ↑ ↓ → ←";
-            Map World = new Map();
-            Hero MainCharacter = new Hero();
-
-            World.WorldMap = World.InitializeMap(24, 55);
-
-            MainCharacter.Position[0] = World.WorldMap.GetLength(0)/2;
-            MainCharacter.Position[1] = World.WorldMap.GetLength(1)/2;
-
+            Map World = new Map(24, 55);
+            Hero MainCharacter = new Hero(World);
+            List<Trap> TrapList = new List<Trap>();
             Monster[] MonsterArray = { new Bat(MainCharacter), new Wolf(MainCharacter), new Dragon(MainCharacter) };
 
-            Hole Hole1 = new Hole(World);
+            TrapList.Add(new Hole(World));
+
+            //Hole Hole1 = new Hole(World);
 
             while (!Lost)
             {
@@ -35,23 +32,19 @@ namespace RPG
                     nextPalier *= 2;
                 }
                 Console.WriteLine(Touches);
-                World.WorldMap[Hole1.Position[0], Hole1.Position[1]] = Hole1.Avatar;
+                foreach (Trap trap in TrapList)
+                {
+                    World.WorldMap[trap.Position[0], trap.Position[1]] = trap.Avatar;
+                    if (trap.Position[0] == MainCharacter.Position[0] && trap.Position[1] == MainCharacter.Position[1])
+                    {
+                        trap.TrapEffect(MainCharacter);
+                    }
+                }
                 World.WorldMap[MainCharacter.Position[0], MainCharacter.Position[1]] = MainCharacter.Avatar;
 
-                //Affiche la carte du monde.
                 World.DrawMap();
 
-                //Gère les interactions entre le héros et le pièges / ennemis.
-                if (MainCharacter.Position[0] == Hole1.Position[0] && MainCharacter.Position[1] == Hole1.Position[1])
-                {
-                    Hole1.TrapEffect(MainCharacter);
-                    if(MainCharacter.PV < 0)
-                    {
-                        MainCharacter.PV = 0;
-                    }
-                    Console.WriteLine($"Vous tombez dans le trou ! Vous perdez {Hole1.Damage} PV. Il vous reste {MainCharacter.PV} PV.");
-                }
-                else
+                if (MainCharacter.CanFight)
                 {
                     World.RandomFight(MainCharacter, MonsterArray[random.Next(0, MaxRandom)]);
                 }

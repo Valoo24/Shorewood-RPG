@@ -13,10 +13,11 @@ namespace RPG
         public float Bonus;
         public int StepCount;
         public int NextLevel;
+        public bool CanFight;
         public List<Item> Inventaire;
         #endregion
         #region constructeur
-        public Hero()
+        public Hero(Map Map)
         {
             Level = 1;
             EXP = 0;
@@ -39,14 +40,18 @@ namespace RPG
             Console.WriteLine("Veuillez saisir le nom de votre héros.");
             Name = Console.ReadLine();
             Race = SetRace();
-            Avatar = SetAvatar();
+            Avatar = "☻";
 
             MaxPV = (int)((Endurance + chance) * Bonus);
             PV = MaxPV;
 
+            CanFight = true;
+
+            this.Position[0] = Map.WorldMap.GetLength(0) / 2;
+            this.Position[1] = Map.WorldMap.GetLength(1) / 2;
+
             Inventaire = new List<Item>();
             Inventaire.Add(new Item("Potion", 2));
-            
         }
         #endregion
         #region Méthodes
@@ -88,35 +93,6 @@ namespace RPG
             } while (error);
 
             return this.Race;
-        }
-        public string SetAvatar()
-        {
-            bool error = true;
-            do
-            {
-                Console.WriteLine("Sélectionnez un avatar pour votre personnage.");
-                Console.WriteLine("<1> ☺\t<2> ☻\t<3> ♥");
-                ConsoleKeyInfo cki = Console.ReadKey();
-                switch (cki.KeyChar)
-                {
-                    case '1':
-                        this.Avatar = "☺";
-                        error = false;
-                        break;
-                    case '2':
-                        this.Avatar = "☻";
-                        error = false;
-                        break;
-                    case '3':
-                        this.Avatar = "♥";
-                        error = false;
-                        break;
-                    default:
-                        break;
-                }
-            } while (error);
-            Console.Clear();
-            return this.Avatar;
         }
         public void ShowStats()
         {
@@ -190,6 +166,7 @@ namespace RPG
                         break;
                 }
             } while (error);
+            this.CanFight = true;
         }
         #endregion
     }
