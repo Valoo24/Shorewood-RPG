@@ -11,7 +11,7 @@ namespace RPG
         public Dragon(Hero Hero)
         {
             Name = "Dragon";
-            EXP = 200;
+            EXP = 500;
             chance = 7;
             Force = 13;
             Endurance = 15;

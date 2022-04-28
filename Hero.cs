@@ -51,7 +51,7 @@ namespace RPG
             this.Position[1] = Map.WorldMap.GetLength(1) / 2;
 
             Inventaire = new List<Item>();
-            Inventaire.Add(new Item("Potion", 2));
+            Inventaire.Add(new Item(ItemType.Potion, 2));
         }
         #endregion
         #region Méthodes
@@ -70,7 +70,7 @@ namespace RPG
                     case '1':
                         Console.WriteLine("Votre héros est un humain.");
                         this.Force += 1;
-                        this.Endurance += 1;
+                        this.Endurance += 2;
                         this.Race = "Humain";
                         error = false;
                         Console.ReadKey();
@@ -78,7 +78,7 @@ namespace RPG
                         break;
                     case '2':
                         Console.WriteLine("Votre héros est un nain.");
-                        this.Endurance += 2;
+                        this.Force += 3;
                         this.Race = "Nain";
                         error = false;
                         Console.ReadKey();
@@ -106,6 +106,7 @@ namespace RPG
             do
             {
                 ConsoleKeyInfo cki = Console.ReadKey();
+                Console.WriteLine();
                 switch (cki.Key)
                 {
                     case ConsoleKey.UpArrow:
@@ -160,6 +161,10 @@ namespace RPG
                         }
                         error = false;
                         break;
+                    case ConsoleKey.I:
+                        OpenInventory();
+                        Console.ReadKey();
+                        break;
                     default:
                         Console.WriteLine("La touche saisie n'est pas bonne");
                         error = true;
@@ -167,6 +172,82 @@ namespace RPG
                 }
             } while (error);
             this.CanFight = true;
+        }
+        public void OpenInventory(Monster Mob)
+        {
+            int i = 1;
+            int choice = 0;
+            string choicetext;
+            if (this.Inventaire.Count > 0)
+            {
+                Console.WriteLine("Sélectionnez un objet de votre invenaire à utiliser (Appuyez sur \"Enter\" pour confirmer).");
+                foreach (Item item in this.Inventaire)
+                {
+                    Console.Write($"{i}.{item.TypeOfItem} X {item.Quantity}\t");
+                    i++;
+                }
+                Console.WriteLine();
+                Console.Write("Objet sélectionné: ");
+                choicetext = Console.ReadLine();
+                if (Int32.TryParse(choicetext, out choice))
+                {
+                    choice = Int32.Parse(choicetext) - 1;
+                    if (choice < this.Inventaire.Count)
+                    {
+                        this.Inventaire[choice].ItemEffect(this, Mob);
+                    }
+                    else
+                    {
+                        Console.WriteLine($"l'idiotie de {this.Name} l'empêche d'agir.");
+                    }
+                }
+                else
+                {
+                    Console.WriteLine($"votre idiotie empêche {this.Name} d'agir.");
+                }
+            }
+            else
+            {
+                Console.WriteLine($"L'inventaire de {this.Name} est vide...");
+            }
+        }
+        public void OpenInventory()
+        {
+            int i = 1;
+            int choice = 0;
+            string choicetext;
+            if (this.Inventaire.Count > 0)
+            {
+                Console.WriteLine("Sélectionnez un objet de votre invenaire à utiliser (Appuyez sur \"Enter\" pour confirmer).");
+                foreach (Item item in this.Inventaire)
+                {
+                    Console.Write($"{i}.{item.TypeOfItem} X {item.Quantity}\t");
+                    i++;
+                }
+                Console.WriteLine();
+                Console.Write("Objet sélectionné: ");
+                choicetext = Console.ReadLine();
+                if (Int32.TryParse(choicetext, out choice))
+                {
+                    choice = Int32.Parse(choicetext) - 1;
+                    if (choice < this.Inventaire.Count)
+                    {
+                        this.Inventaire[choice].ItemEffect(this);
+                    }
+                    else
+                    {
+                        Console.WriteLine($"La touche saisie incorrecte");
+                    }
+                }
+                else
+                {
+                    Console.WriteLine($"La touche saisie est incorrecte");
+                }
+            }
+            else
+            {
+                Console.WriteLine($"L'inventaire de {this.Name} est vide...");
+            }
         }
         #endregion
     }

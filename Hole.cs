@@ -9,11 +9,11 @@ namespace RPG
     public class Hole : Trap
     {
         #region Constructeur
-        public Hole(Map WorldMap)
+        public Hole(int PositionX, int PositionY)
         {
             Name = "trou";
-            Damage = 10;
-            SetTrapPosition(WorldMap);
+            Position[0] = PositionX;
+            Position[1] = PositionY;
         }
         #endregion
         #region Méthodes
@@ -22,14 +22,13 @@ namespace RPG
             if (this.IsEffective)
             {
                 Character.CanFight = false;
-                Console.WriteLine($"{Character.Name} tombe dans un {this.Name}. {Character.Name} perds {this.Damage}PV.");
-                Character.PV -= this.Damage;
+                Console.WriteLine($"{Character.Name} tombe dans un {this.Name}. {Character.Name} perds {(int)(Character.MaxPV * 0.25f)}PV.");
+                Character.PV -= (int)(Character.MaxPV * 0.25f);
                 if (Character.PV < 0)
                 {
                     Character.PV = 0;
                 }
-                this.Avatar = " ";
-                this.IsEffective = false;
+                this.IsUneffective();
             }
         }
         #endregion

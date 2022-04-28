@@ -91,6 +91,7 @@ namespace RPG
                 {
                     Console.WriteLine("Déplacements: ↑ ↓ → ←");
                     this.DrawMap();
+                    Character.ShowStats();
                     Character.StepCount = 0;
                 }
             }
@@ -180,41 +181,7 @@ namespace RPG
                     case '2': //Insérer Script du choix de Magie
                         break;
                     case '3':
-                        int i = 1;
-                        int choice = 0;
-                        string choicetext;
-                        if (Character.Inventaire.Count > 0)
-                        {
-                            Console.WriteLine("Sélectionnez un objet de votre invenaire à utiliser (Appuyez sur \"Enter\" pour confirmer).");
-                            foreach (Item item in Character.Inventaire)
-                            {
-                                Console.Write($"{i}.{item.Name} X {item.Quantity}\t");
-                                i++;
-                            }
-                            Console.WriteLine();
-                            Console.Write("Objet sélectionné: ");
-                            choicetext = Console.ReadLine();
-                            if (Int32.TryParse(choicetext, out choice))
-                            {
-                                choice = Int32.Parse(choicetext) - 1;
-                                if (choice < Character.Inventaire.Count)
-                                {
-                                    Character.Inventaire[choice].ItemEffect(Character, Mob);
-                                }
-                                else
-                                {
-                                    Console.WriteLine($"l'idiotie de {Character.Name} l'empêche d'agir.");
-                                }
-                            }
-                            else
-                            {
-                                Console.WriteLine($"votre idiotie empêche {Character.Name} d'agir.");
-                            }
-                        }
-                        else
-                        {
-                            Console.WriteLine($"L'inventaire de {Character.Name} est vide...");
-                        }
+                        Character.OpenInventory(Mob);
                         break;
                     case '4':
                         #region Fuite

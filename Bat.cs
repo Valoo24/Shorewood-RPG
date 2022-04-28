@@ -80,7 +80,7 @@ namespace RPG
             {
                 foreach(Item item in Character.Inventaire)
                 {
-                    if(item.Name == "Potion")
+                    if(item.TypeOfItem == ItemType.Potion)
                     {
                         item.Quantity += 1;
                         isFound = true;
@@ -88,7 +88,7 @@ namespace RPG
                 }
                 if(!isFound)
                 {
-                    Character.Inventaire.Add(new Item("Potion", 1));
+                    Character.Inventaire.Add(new Item(ItemType.Potion, 1));
                 }
                 Console.WriteLine($"Super ! {Character.Name} trouve une potion sur le cadavre de {this.Name}");
             }
