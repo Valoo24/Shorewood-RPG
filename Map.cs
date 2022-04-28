@@ -86,7 +86,7 @@ namespace RPG
                 this.Battle(Character, Mob);
                 if (!Character.IsDead())
                 {
-                    Console.WriteLine();
+                    Console.WriteLine("Déplacements: ↑ ↓ → ←");
                     this.DrawMap();
                     Character.StepCount = 0;
                 }
@@ -130,6 +130,7 @@ namespace RPG
                         if (Mob.IsDead())
                         {
                             Console.WriteLine($"Vous avez tué {Mob.Name}!");
+                            Mob.Loot(Character);
                             Character.EXP += Mob.EXP;
                             #region Gain de niveau
                             if (Character.EXP >= Character.NextLevel)
@@ -142,7 +143,7 @@ namespace RPG
                                 Character.PV = Character.MaxPV;
                                 Console.WriteLine($"Wow ! {Character.Name} Monte d'un niveau ! {Character.Level - 1} ► {Character.Level}\n{Character.Name} récupère tout ses PV !");
                                 r = Character.rand.Next(1, 2);
-                                switch (Character.rand.Next(1, 4))
+                                switch (Character.rand.Next(1, 5))
                                 {
                                     case 1:
                                         Character.Force += r;
@@ -176,34 +177,57 @@ namespace RPG
                     case '2': //Insérer Script du choix de Magie
                         break;
                     case '3':
-                        Console.WriteLine("Sélectionnez un objet de votre invenaire à utiliser");
+                        Console.WriteLine("Sélectionnez un objet de votre invenaire à utiliser (Appuyez sur \"Enter\" pour confirmer).");
                         int i = 1;
-                        foreach(string item in Character.Inventaire)
+                        int choice = 0;
+                        string choicetext;
+                        if (Character.Inventaire.Count > 0)
                         {
-                            Console.Write($"{i}.{item}");
-                        }
-                        Console.WriteLine();
-                        Console.Write("Objet sélectionné: ");
-                        ConsoleKeyInfo key = Console.ReadKey();
-                        Console.WriteLine();
-                        switch(key.KeyChar)
-                        {
-                            case '1':
-                                if(Character.MaxPV - Character.PV >= Character.MaxPV / 2)
+                            foreach (Item item in Character.Inventaire)
+                            {
+                                Console.Write($"{i}.{item.Name} X {item.Quantity}\t");
+                                i++;
+                            }
+                            Console.WriteLine();
+                            Console.Write("Objet sélectionné: ");
+                            choicetext = Console.ReadLine();
+                            if (Int32.TryParse(choicetext, out choice))
+                            {
+                                choice = Int32.Parse(choicetext) - 1;
+                                if (choice < Character.Inventaire.Count)
                                 {
-                                    i = Character.MaxPV / 2;
+                                    if (Character.Inventaire[choice].Name == "Potion")
+                                    {
+                                        if (Character.MaxPV - Character.PV >= Character.MaxPV / 2)
+                                        {
+                                            i = Character.MaxPV / 2;
+                                        }
+                                        else
+                                        {
+                                            i = Character.MaxPV - Character.PV;
+                                        }
+                                        Character.PV += i;
+                                        Console.WriteLine($"{Character.Name} utilise {Character.Inventaire[choice].Name}. {Character.Name} Récupère {i} PV.");
+                                        Character.Inventaire[choice].Quantity -= 1;
+                                        if (Character.Inventaire[choice].Quantity == 0)
+                                        {
+                                            Character.Inventaire.RemoveAt(choice);
+                                        }
+                                    }
                                 }
                                 else
                                 {
-                                    i = Character.MaxPV - Character.PV;
+                                    Console.WriteLine($"l'idiotie de {Character.Name} l'empêche d'agir.");
                                 }
-                                Character.PV += i;
-                                Console.WriteLine($"{Character.Name} utilise une potion. {Character.Name} Récupère {i} PV.");
-                                Character.Inventaire.Remove("Potion");
-                                break;
-                            default:
-                                Console.WriteLine("Votre idiotie vous empêche d'agir.");
-                                break;
+                            }
+                            else
+                            {
+                                Console.WriteLine($"l'idiotie de {Character.Name} l'empêche d'agir.");
+                            }
+                        }
+                        else
+                        {
+                            Console.WriteLine($"L'inventaire de {Character.Name} est vide...");
                         }
                         break;
                     case '4':
@@ -228,7 +252,7 @@ namespace RPG
                         IsFlying = true;
                         break;
                     default:
-                        Console.WriteLine("Votre idiotie vous empêche d'agir.");
+                        Console.WriteLine($"l'idiotie de {Character.Name} l'empêche d'agir.");
                         break;
                 }
                 Console.ReadKey();
@@ -242,7 +266,7 @@ namespace RPG
                 if(Character.IsDead())
                 {
                     stop = true;
-                    Console.WriteLine($"{Mob.Name} vous a tué. Vous êtes mort dans l'indifférence totale...");
+                    Console.WriteLine($"{Mob.Name} vous a tué. {Character.Name} est mort dans l'indifférence totale...");
                     Console.ReadKey();
                     Console.WriteLine();
                 }

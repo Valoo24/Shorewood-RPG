@@ -14,7 +14,7 @@ namespace RPG
             Name = "Chauve-Souris";
             EXP = 50;
             chance = 5;
-            Force = 8;
+            Force = 6;
             Endurance = 8;
             MaxPV = 25;
             PV = 25;
@@ -70,6 +70,28 @@ namespace RPG
 		
 ";
             #endregion
+        }
+        #endregion
+        #region Méthodes
+        public override void Loot(Hero Character)
+        {
+            bool isFound = false;
+            if(this.rand.Next(0, 4) > 2)
+            {
+                foreach(Item item in Character.Inventaire)
+                {
+                    if(item.Name == "Potion")
+                    {
+                        item.Quantity += 1;
+                        isFound = true;
+                    }
+                }
+                if(!isFound)
+                {
+                    Character.Inventaire.Add(new Item("Potion", 1));
+                }
+                Console.WriteLine($"Super ! {Character.Name} trouve une potion sur le cadavre de {this.Name}");
+            }
         }
         #endregion
     }

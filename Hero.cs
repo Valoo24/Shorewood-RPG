@@ -13,7 +13,7 @@ namespace RPG
         public float Bonus;
         public int StepCount;
         public int NextLevel;
-        public List<string> Inventaire;
+        public List<Item> Inventaire;
         #endregion
         #region constructeur
         public Hero()
@@ -44,8 +44,9 @@ namespace RPG
             MaxPV = (int)((Endurance + chance) * Bonus);
             PV = MaxPV;
 
-            Inventaire = new List<string>();
-            Inventaire.Add("Potion");
+            Inventaire = new List<Item>();
+            Inventaire.Add(new Item("Potion", 2));
+            
         }
         #endregion
         #region Méthodes

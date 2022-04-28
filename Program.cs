@@ -15,8 +15,8 @@ namespace RPG
             int nextPalier = 2;
             bool Lost = false;
             string Touches = "Déplacements: ↑ ↓ → ←";
-            Hero MainCharacter = new Hero();
             Map World = new Map();
+            Hero MainCharacter = new Hero();
 
             World.WorldMap = World.InitializeMap(24, 55);
 

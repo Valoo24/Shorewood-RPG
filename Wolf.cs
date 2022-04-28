@@ -13,9 +13,9 @@ namespace RPG
         {
             Name = "Loup";
             EXP = 100;
-            chance = 7;
-            Force = 10;
-            Endurance = 12;
+            chance = 6;
+            Force = 8;
+            Endurance = 10;
             MaxPV = 50;
             PV = 50;
             SetPosition(Hero);

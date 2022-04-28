@@ -12,9 +12,9 @@ namespace RPG
         {
             Name = "Dragon";
             EXP = 200;
-            chance = 9;
-            Force = 25;
-            Endurance = 18;
+            chance = 7;
+            Force = 13;
+            Endurance = 15;
             MaxPV = 100;
             PV = 100;
             SetPosition(Hero);
