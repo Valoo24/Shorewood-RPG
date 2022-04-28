@@ -22,6 +22,7 @@ namespace RPG
             bool FoundInInventory = false;
             if (this.IsEffective)
             {
+                Character.CanFight = false;
                 Console.WriteLine($"{Character.Name} tombe sur {this.Name} ! {Character.Name} trouve {this.ItemInChest.Quantity} X {this.ItemInChest.TypeOfItem} !");
                 foreach (Item item in Character.Inventaire)
                 {

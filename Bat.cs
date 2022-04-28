@@ -9,7 +9,7 @@ namespace RPG
     public class Bat : Monster
     {
         #region Constructeur
-        public Bat(Hero Hero)
+        public Bat()
         {
             Name = "Chauve-Souris";
             EXP = 50;
@@ -18,7 +18,6 @@ namespace RPG
             Endurance = 8;
             MaxPV = 25;
             PV = 25;
-            SetPosition(Hero);
             #region ASCII Chauve-souris
             ASCII = @"
 #

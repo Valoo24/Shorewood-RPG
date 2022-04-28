@@ -9,16 +9,15 @@ namespace RPG
     internal class Wolf : Monster
     {
         #region Constructeurs
-        public Wolf(Hero Hero)
+        public Wolf()
         {
             Name = "Loup";
-            EXP = 100;
+            EXP = 200;
             chance = 6;
             Force = 8;
             Endurance = 10;
             MaxPV = 50;
             PV = 50;
-            SetPosition(Hero);
             #region ASCII Loup
             ASCII = @"
 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
@@ -48,7 +47,7 @@ namespace RPG
         public override void Loot(Hero Character)
         {
             bool isFound = false;
-            int WhatFound = this.rand.Next(0, 2);
+            int WhatFound = this.rand.Next(0, 3);
             switch(WhatFound)
             { 
                 case 0:
@@ -81,6 +80,7 @@ namespace RPG
                     }
                     Console.WriteLine($"Super ! {Character.Name} dépece le cadavre de {this.Name} et récupère 1 cuir.");
                     break;
+                default: break;
             }
         }
         #endregion

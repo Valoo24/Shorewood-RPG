@@ -6,11 +6,10 @@ using System.Threading.Tasks;
 
 namespace RPG
 {
-    public enum ItemType { Potion, Cuir }
+    public enum ItemType { Potion, Cuir, Fouet, Bottes, Gilet, Chapeau }
     public class Item
     {
         public ItemType TypeOfItem;
-        //public string Name;
         public int Quantity;
         public Item(ItemType TypeOfItem, int NewQuantity)
         {

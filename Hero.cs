@@ -165,6 +165,10 @@ namespace RPG
                         OpenInventory();
                         Console.ReadKey();
                         break;
+                    case ConsoleKey.C:
+                        CraftMenu();
+                        Console.ReadKey();
+                        break;
                     default:
                         Console.WriteLine("La touche saisie n'est pas bonne");
                         error = true;
@@ -247,6 +251,48 @@ namespace RPG
             else
             {
                 Console.WriteLine($"L'inventaire de {this.Name} est vide...");
+            }
+        }
+        public void CraftMenu()
+        {
+            int NbrOfLeather = 0;
+            string BonusText = "";
+            foreach(Item item in this.Inventaire)
+            {
+                if(item.TypeOfItem == ItemType.Cuir)
+                {
+                    NbrOfLeather = item.Quantity;
+                }
+            }
+            if(NbrOfLeather >= 1)
+            {
+                Console.WriteLine("Choisissez l'objet que vous voulez fabriquer.");
+                for (int i = 2; i < 6; i++)
+                {
+                    if(i == 2)
+                    {
+                        BonusText = "Force + 4";
+                    }
+                    if(i == 3)
+                    {
+                        BonusText = "Endurance + 4";
+                    }
+                    if(i == 4)
+                    {
+                        BonusText = "PV + 25";
+                    }
+                    if(i == 5)
+                    {
+                        BonusText = "Chance + 4";
+                    }
+                    Console.Write($"{i - 1}. {(ItemType)i}({BonusText})\t");
+                }
+                Console.WriteLine();
+                Console.ReadKey();
+            }
+            else
+            {
+                Console.WriteLine($"{this.Name} n'a pas les objets nécessaires pour créer de l'équipement.");
             }
         }
         #endregion

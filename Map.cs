@@ -82,14 +82,14 @@ namespace RPG
         /// </summary>
         /// <param name="Character">Instance du Héros du jeu</param>
         /// <param name="Mob">Instance du monstre que le héros risque de combattre</param>
-        public void RandomFight(Hero Character, Monster Mob)
+        public void RandomFight(Hero Character, Monster Mob, string TextCommand)
         {
             if(Character.throwDice(1) * 2 < Character.StepCount)
             {
                 this.Battle(Character, Mob);
                 if (!Character.IsDead())
                 {
-                    Console.WriteLine("Déplacements: ↑ ↓ → ←");
+                    Console.WriteLine(TextCommand);
                     this.DrawMap();
                     Character.ShowStats();
                     Character.StepCount = 0;

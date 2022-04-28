@@ -16,11 +16,12 @@ namespace RPG
             int MaxRandom = 1;
             int nextPalier = 2;
             bool Lost = false;
-            string Touches = "Déplacements: ↑ ↓ → ←\tInventaire : i";
+            string Touches = "Déplacements: ↑ ↓ → ←\tInventaire : i\tCraft : c";
             Map World = new Map(24, 55);
             Hero MainCharacter = new Hero(World);
             List<Trap> TrapList = new List<Trap>();
-            Monster[] MonsterArray = { new Bat(MainCharacter), new Wolf(MainCharacter), new Dragon(MainCharacter) };
+            Monster[] MonsterArray = { new Bat(), new Wolf(), new Dragon() };
+            FinalBoss FinalOvyn = new FinalBoss();
 
             for(int i = 0; i < 3; i++)
             {
@@ -40,7 +41,12 @@ namespace RPG
                 } while (World.WorldMap[TrapPositionX, TrapPositionY] != " ");
                 TrapList.Add(new Chest(TrapPositionX, TrapPositionY, (ItemType)random.Next(0, 2)));
             }
-
+            for (int i = 2; i < 6; i++)
+            {
+                TrapPositionX = random.Next(1, 24);
+                TrapPositionY = random.Next(1, 55);
+                TrapList.Add(new Chest(TrapPositionX, TrapPositionY, (ItemType)i));
+            }
             if (MainCharacter.Name != "Ovyn")
             {
                 Console.WriteLine($"Le royaume de Shorewood a besoin de l'aide de {MainCharacter.Name}. De viles créatures ont pris possession de la grande forêt leur permettant de contacter" +
@@ -84,6 +90,10 @@ namespace RPG
                     if (trap.Position[0] == MainCharacter.Position[0] && trap.Position[1] == MainCharacter.Position[1])
                     {
                         trap.TrapEffect(MainCharacter);
+                        if (MainCharacter.IsDead())
+                        {
+                            Lost = true;
+                        }
                     }
                 }
                 World.WorldMap[MainCharacter.Position[0], MainCharacter.Position[1]] = MainCharacter.Avatar;
@@ -93,22 +103,33 @@ namespace RPG
 
                 if (MainCharacter.CanFight)
                 {
-                    World.RandomFight(MainCharacter, MonsterArray[random.Next(0, MaxRandom)]);
+                    if (MainCharacter.Level < 6)
+                    {
+                        World.RandomFight(MainCharacter, MonsterArray[random.Next(0, MaxRandom)], Touches);
+                        if (MainCharacter.IsDead())
+                        {
+                            Console.ReadKey();
+                            Lost = true;
+                        }
+                    }
+                    else
+                    {
+                        World.RandomFight(MainCharacter, FinalOvyn, Touches);
+                        if(!MainCharacter.IsDead())
+                        {
+                            Lost = true;
+                        }
+                    }    
                 }
 
-                if(MainCharacter.IsDead())
+                if (!Lost)
                 {
-                    Console.ReadKey();
-                    Lost = true;
-                }
-                else
-                {
-                    //Gère tous les déplacements du jeu.
                     MainCharacter.Move(World);
                 }
 
                 Console.Clear();
             }
+            //Fin de la boucle
             if(MainCharacter.IsDead())
             {
                 Console.WriteLine($"{MainCharacter.Name} n'a pas pu sauver la forêt de Shorewood et est mort en vain.");
